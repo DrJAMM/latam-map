@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/latam-map/static/css/main.8abc8ff2.css",
+    "main.js": "/latam-map/static/js/main.30849bbc.js",
+    "static/js/488.26cf1276.chunk.js": "/latam-map/static/js/488.26cf1276.chunk.js",
+    "static/media/maria.jpg": "/latam-map/static/media/maria.2fa897bbde469841a416.jpg",
+    "static/media/carlos.jpg": "/latam-map/static/media/carlos.ec13c159891013ef97ad.jpg",
+    "index.html": "/latam-map/index.html",
+    "main.8abc8ff2.css.map": "/latam-map/static/css/main.8abc8ff2.css.map",
+    "main.30849bbc.js.map": "/latam-map/static/js/main.30849bbc.js.map",
+    "488.26cf1276.chunk.js.map": "/latam-map/static/js/488.26cf1276.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8abc8ff2.css",
+    "static/js/main.30849bbc.js"
+  ]
+}
