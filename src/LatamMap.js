@@ -7,7 +7,6 @@ import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-// Fix for default marker icons in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
  iconRetinaUrl: markerIcon2x,
@@ -27,7 +26,6 @@ const LatamMap = () => {
    const fetchMembers = async () => {
      try {
        const spreadsheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTU3J9hVXZ0VwcJAlvxa1FZ3FGZUDD3Y8xNlcXXQ6Wzt6VjLoh6d4EY3QxywLKEQ9ZyWbwyTVaFOryk/pub?output=csv';
-       
        const response = await fetch(spreadsheetUrl);
        const csvData = await response.text();
        
@@ -43,17 +41,11 @@ const LatamMap = () => {
              email: row.email,
              origin: {
                country: row.originCountry,
-               coordinates: [
-                 parseFloat(row.originLatitude),
-                 parseFloat(row.originLongitude)
-               ]
+               coordinates: [parseFloat(row.originLatitude), parseFloat(row.originLongitude)]
              },
              current: {
                country: row.currentLocation,
-               coordinates: [
-                 parseFloat(row.currentLatitude),
-                 parseFloat(row.currentLongitude)
-               ]
+               coordinates: [parseFloat(row.currentLatitude), parseFloat(row.currentLongitude)]
              },
              researchTags: row.researchTags.split(',').map(tag => tag.trim()),
              bio: row.bio,
@@ -76,7 +68,6 @@ const LatamMap = () => {
    fetchMembers();
  }, []);
 
- // Custom marker icons
  const originIcon = new L.Icon({
    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-gold.png',
    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -100,25 +91,23 @@ const LatamMap = () => {
 
  return (
    <div className="p-4">
-     {/* Filter Buttons */}
      <div className="mb-4 flex flex-wrap gap-2">
        {availableTags.map(tag => (
          <button
            key={tag}
            onClick={() => setActiveFilter(tag)}
-           className={`px-4 py-2 rounded-full transition-colors duration-200 ${
+           className={`px-4 py-2 rounded transition-colors duration-200 ${
              activeFilter === tag 
-               ? 'bg-blue-600 text-white' 
-               : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+               ? 'bg-gray-300 text-black' 
+               : 'bg-gray-200 hover:bg-gray-300 text-black'
            }`}
          >
-           {tag}
+           {tag === 'all' ? 'All' : tag.charAt(0).toUpperCase() + tag.slice(1)}
          </button>
        ))}
      </div>
 
      <div className="flex gap-4">
-       {/* Map Container */}
        <div className="relative w-[80%] h-[600px] border rounded-lg overflow-hidden">
          <MapContainer
            center={[0, 0]}
@@ -133,12 +122,9 @@ const LatamMap = () => {
            />
            
            {members
-             .filter(member => 
-               activeFilter === 'all' || member.researchTags.includes(activeFilter)
-             )
+             .filter(member => activeFilter === 'all' || member.researchTags.includes(activeFilter))
              .map(member => (
                <React.Fragment key={member.id}>
-                 {/* Origin location - always shown */}
                  <Marker
                    position={member.origin.coordinates}
                    icon={originIcon}
@@ -147,7 +133,6 @@ const LatamMap = () => {
                    }}
                  />
                  
-                 {/* Current location and line - only shown when member is selected */}
                  {selectedMember && selectedMember.id === member.id && 
                   member.origin.country !== member.current.country && (
                    <>
@@ -167,7 +152,6 @@ const LatamMap = () => {
          </MapContainer>
        </div>
 
-       {/* Member Details Panel */}
        {selectedMember ? (
          <div className="flex-none w-80 bg-white p-4 rounded-lg shadow-lg border">
            <button 
