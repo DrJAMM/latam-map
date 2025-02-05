@@ -254,7 +254,9 @@ const LatamMap = () => {
 
       <div style={{ display: 'flex', flex: 1 }}>
         <div style={{ width: '70%', height: '100%' }}>
-        <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
+        <LoadScript 
+  googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
+>
             <GoogleMap
               mapContainerStyle={mapContainerStyle}
               center={defaultCenter}
