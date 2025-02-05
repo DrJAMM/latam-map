@@ -128,6 +128,7 @@ const LatamMap = () => {
     }
   };
 
+
   const handleCountryChange = useCallback((country) => {
     setSelectedCountry(country);
     if (map && country) {
@@ -151,8 +152,7 @@ const LatamMap = () => {
       map.panTo(defaultCenter);
       map.setZoom(3);
     }
-  }, [map]);
-
+  }, [map, countryBounds, defaultCenter]);
   const handleClear = () => {
     setSelectedMember(null); // Clear selected member
     setSelectedCountry(''); // Clear selected country
