@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - gh-pages
+      - main  # Changed from gh-pages to your source branch
 
 jobs:
   build-and-deploy:
@@ -32,3 +32,6 @@ jobs:
         with:
           branch: gh-pages
           folder: build
+          token: ${{ secrets.DEPLOY_TOKEN }}  # Add this line
+          clean: true  # Add this
+          force: true  # Add this
