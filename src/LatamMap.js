@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { GoogleMap, LoadScript, MarkerF, PolylineF } from '@react-google-maps/api';
 import Papa from 'papaparse';
 
@@ -12,17 +12,17 @@ const LatamMap = () => {
   const [error, setError] = useState(null);
   const [map, setMap] = useState(null);
 
-  const mapContainerStyle = {
+  const mapContainerStyle = useMemo(() => ({
     width: '100%',
     height: '100%'
-  };
+  }), []);
 
-  const defaultCenter = {
+  const defaultCenter = useMemo(() => ({
     lat: -15,
     lng: -75  // Centered on Latin America
-  };
+  }), []);
 
-  const countryBounds = {
+  const countryBounds = useMemo(() => ({
     'Mexico': {
       center: { lat: 23.6345, lng: -102.5528 },
       bounds: {
@@ -86,20 +86,18 @@ const LatamMap = () => {
         west: -73.3757
       }
     }
-  };
+  }), []);
 
-  const handleMemberSelect = (member) => {
+  const handleMemberSelect = useCallback((member) => {
     setSelectedMember(member);
     if (map && member) {
       const bounds = new window.google.maps.LatLngBounds();
 
-      // Always include the origin coordinates
       bounds.extend({
         lat: member.origin.coordinates[0],
         lng: member.origin.coordinates[1]
       });
 
-      // If the member has a current location, include it in the bounds
       if (member.current?.coordinates) {
         bounds.extend({
           lat: member.current.coordinates[0],
@@ -107,18 +105,14 @@ const LatamMap = () => {
         });
       }
 
-      // Fit the map to the calculated bounds
       map.fitBounds(bounds, { padding: { top: 50, right: 50, bottom: 50, left: 50 } });
 
-      // Optional: Add a small delay to ensure smooth panning
       setTimeout(() => {
         if (member.current?.coordinates) {
-          // If there's a current location, pan to the midpoint between origin and current
           const midLat = (member.origin.coordinates[0] + member.current.coordinates[0]) / 2;
           const midLng = (member.origin.coordinates[1] + member.current.coordinates[1]) / 2;
           map.panTo({ lat: midLat, lng: midLng });
         } else {
-          // If no current location, pan to the origin
           map.panTo({
             lat: member.origin.coordinates[0],
             lng: member.origin.coordinates[1]
@@ -126,8 +120,7 @@ const LatamMap = () => {
         }
       }, 100);
     }
-  };
-
+  }, [map]);
 
   const handleCountryChange = useCallback((country) => {
     setSelectedCountry(country);
@@ -153,15 +146,15 @@ const LatamMap = () => {
       map.setZoom(3);
     }
   }, [map, countryBounds, defaultCenter]);
-  const handleClear = () => {
-    setSelectedMember(null); // Clear selected member
-    setSelectedCountry(''); // Clear selected country
-    if (map) {
-      map.panTo(defaultCenter); // Reset map to default center
-      map.setZoom(3); // Reset zoom level
-    }
-  };
 
+  const handleClear = useCallback(() => {
+    setSelectedMember(null);
+    setSelectedCountry('');
+    if (map) {
+      map.panTo(defaultCenter);
+      map.setZoom(3);
+    }
+  }, [map, defaultCenter]);
   useEffect(() => {
     const fetchMembers = async () => {
       try {
@@ -210,21 +203,27 @@ const LatamMap = () => {
     fetchMembers();
   }, []);
 
-  const countries = [...new Set(members.map(m => m.origin.country))].sort();
+  const countries = useMemo(() => 
+    [...new Set(members.map(m => m.origin.country))].sort(),
+    [members]
+  );
   
-  const filteredMembers = members.filter(member => 
-    (activeFilter === 'all' || member.researchTags.includes(activeFilter)) &&
-    (selectedCountry === '' || member.origin.country === selectedCountry)
+  const filteredMembers = useMemo(() => 
+    members.filter(member => 
+      (activeFilter === 'all' || member.researchTags.includes(activeFilter)) &&
+      (selectedCountry === '' || member.origin.country === selectedCountry)
+    ),
+    [members, activeFilter, selectedCountry]
   );
 
-  const getMarkerColor = (country, memberId) => {
+  const getMarkerColor = useCallback((country, memberId) => {
     const countryMembers = members.filter(m => m.origin.country === country);
     const memberIndex = countryMembers.findIndex(m => m.id === memberId);
-    const baseHue = 0; // Red
+    const baseHue = 0;
     const saturation = 100;
     const lightness = Math.max(40, 70 - (memberIndex * 15));
     return `hsl(${baseHue}, ${saturation}%, ${lightness}%)`;
-  };
+  }, [members]);
 
   if (loading) return <div className="flex items-center justify-center h-96">Loading...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
@@ -254,9 +253,7 @@ const LatamMap = () => {
 
       <div style={{ display: 'flex', flex: 1 }}>
         <div style={{ width: '70%', height: '100%' }}>
-        <LoadScript 
-  googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
->
+          <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
             <GoogleMap
               mapContainerStyle={mapContainerStyle}
               center={defaultCenter}
@@ -399,7 +396,6 @@ const LatamMap = () => {
             )}
           </div>
 
-          {/* Clear Button */}
           <button
             onClick={handleClear}
             style={{
