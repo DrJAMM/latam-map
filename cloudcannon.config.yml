@@ -1,0 +1,13 @@
+source: /
+collections_config:
+  build:
+    path: build
+    name: Build
+    icon: build
+paths:
+  static: ''
+  uploads: uploads
+timezone: America/Denver
+markdown:
+  engine: commonmark
+  options: {}
