@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { GoogleMap, LoadScript, MarkerF, PolylineF } from '@react-google-maps/api';
 import Papa from 'papaparse';
 
@@ -12,17 +12,17 @@ const LatamMap = () => {
   const [error, setError] = useState(null);
   const [map, setMap] = useState(null);
 
-  const mapContainerStyle = {
+  const mapContainerStyle =  useMemo(() => ({
     width: '100%',
     height: '100%'
-  };
+  }), []);
 
-  const defaultCenter = {
+  const defaultCenter = useMemo(() => ({
     lat: -15,
     lng: -75  // Centered on Latin America
-  };
+  }), []);
 
-  const countryBounds = {
+  const countryBounds = useMemo(() => ({
     'Mexico': {
       center: { lat: 23.6345, lng: -102.5528 },
       bounds: {
@@ -86,7 +86,7 @@ const LatamMap = () => {
         west: -73.3757
       }
     }
-  };
+  }), []);
 
   const handleMemberSelect = (member) => {
     setSelectedMember(member);
@@ -127,6 +127,9 @@ const LatamMap = () => {
       }, 100);
     }
   };
+  
+
+
 
   const handleCountryChange = useCallback((country) => {
     setSelectedCountry(country);
