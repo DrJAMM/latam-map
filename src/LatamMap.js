@@ -151,7 +151,8 @@ const LatamMap = () => {
       map.panTo(defaultCenter);
       map.setZoom(3);
     }
-  }, [map]);
+  }, [map, countryBounds, defaultCenter]); // Added missing dependencies
+
 
   const handleClear = () => {
     setSelectedMember(null); // Clear selected member
