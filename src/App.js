@@ -3,16 +3,7 @@ import LatamMap from './LatamMap';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <div className="flex items-center space-x-4 m-4">
-        <h1 className="text-2xl font-bold">Latin American Chapter Member Map</h1>
-
-
-      </div>
-      <LatamMap />
-    </div>
-  );
+  return <LatamMap />;
 }
 
 export default App;
