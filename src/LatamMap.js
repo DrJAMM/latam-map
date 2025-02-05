@@ -254,17 +254,25 @@ const LatamMap = () => {
 
       <div style={{ display: 'flex', flex: 1 }}>
         <div style={{ width: '70%', height: '100%' }}>
-        <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
-            <GoogleMap
-              mapContainerStyle={mapContainerStyle}
-              center={defaultCenter}
-              zoom={3}
-              onLoad={setMap}
-              options={{
-                minZoom: 2,
-                maxZoom: 8
-              }}
-            >
+        <LoadScript 
+  googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
+  onLoad={() => console.log('Script loaded successfully')}
+  onError={(error) => console.error('Script failed to load', error)}
+>
+<GoogleMap
+  mapContainerStyle={mapContainerStyle}
+  center={defaultCenter}
+  zoom={3}
+  onLoad={(map) => {
+    console.log('Map loaded successfully');
+    setMap(map);
+  }}
+  onError={(error) => console.error('Map failed to load:', error)}
+  options={{
+    minZoom: 2,
+    maxZoom: 8
+  }}
+>
               {filteredMembers.map(member => (
                 <React.Fragment key={member.id}>
                   <MarkerF
