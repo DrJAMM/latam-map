@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/latam-map/static/css/main.80cf9f4d.css",
+    "main.js": "/latam-map/static/js/main.5619c841.js",
+    "static/js/488.26cf1276.chunk.js": "/latam-map/static/js/488.26cf1276.chunk.js",
+    "index.html": "/latam-map/index.html",
+    "main.80cf9f4d.css.map": "/latam-map/static/css/main.80cf9f4d.css.map",
+    "main.5619c841.js.map": "/latam-map/static/js/main.5619c841.js.map",
+    "488.26cf1276.chunk.js.map": "/latam-map/static/js/488.26cf1276.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.80cf9f4d.css",
+    "static/js/main.5619c841.js"
+  ]
+}
